@@ -22,21 +22,13 @@ a를 1로 가정하고 풀어보면, d는 3이 되고, c는 4가 됩니다.
 
 이제 이 수를 화학반응식에 넣어봅시다.
 C3H8+5O2 -> 4H2O + 3CO2
-
-물질의 상태
-
-고체(s)
-액체(l)
-기체(g)
-수용액(aq)
-
 """
 
 from re import split #정규식 split 함수 
 
 atom=\
 (
-    'H','He',
+    'H','He',  
     'Li','Be','B','C','N','O','F','Ne',
     'Na','Mg','Al','Si','P','S','Cl','Ar',
     'K','Ca','Sc','Ti','V','Cr','Mn','Fe','Co','Ni','Cu','Zn','Ga','Ge','As','Se','Br','Kr',
@@ -57,27 +49,60 @@ print("="*40)
 reactants: 반응물 리스트
 products:  생성물 리스트
 """
-reactants=split("\W+",input("반응물을 입력하세요: "))
-products=split("\W+",input("생성물을 입력하세요: "))
+reactants=split(r"[\W']+",input("반응물을 입력하세요: "))
+products=split(r"[\W']+",input("생성물을 입력하세요: "))
 print("="*40)
 
-#실제로 존재하는 원소인지 판별
+#오류로 들어갈만한 공백, '' 삭제
 for x in range(len(reactants)):
-    for i in range(len(reactants[x]))
-        if reactants[x][i].isdigit() or reactants[x][i].islower():
-            reactants
-"""
-for x in reactants:
-    if x in atom:
-        print("원소 있음")
-    else:
-        print("프로그램 종료")
-        exit(1)
+    if reactants[x]==' ' or reactants[x]=='':
+        del reactants[x]
 
-for x in products:
-    if x in atom:
-        print("원소 있음")
-    else:
-        print("프로그램 종료")
-        exit(1)
-"""
+for x in range(len(products)):
+    if products[x]==' ' or products[x]=='':
+        del products[x]
+
+#원소 리스트 
+reactants_dict=list()
+products_dict=list()
+
+for x in range(len(reactants)):
+    reactants_dict.append(dict())
+for x in range(len(products)):
+    products_dict.append(dict())
+
+#원자 추출
+for x in range(len(reactants)):
+    for i in range(len(reactants[x])):
+        #만약 숫자라면
+        if reactants[x][i].isdigit():
+            reactants_dict[x][reactants[x][i-1]]=int(reactants[x][i])
+            try:
+                if reactants[x][i+1].isupper():
+                    continue
+            except IndexError:
+                continue        
+        #만약 소문자라면  
+        if reactants[x][i].lower():
+            reactants_dict[x][reactants[x][i]]=1
+
+for x in range(len(products)):
+    for i in range(len(products[x])):
+     #만약 숫자라면
+        if products[x][i].isdigit():
+            products_dict[x][products[x][i-1]]=int(products[x][i])
+            try:
+                if products[x][i+1].isupper():
+                    continue
+            except IndexError:
+                continue        
+        #만약 소문자라면  
+        if products[x][i].lower():
+            products_dict[x][products[x][i]]=1
+
+print(reactants)
+print(products)
+print(reactants_dict)
+print(products_dict)
+
+
