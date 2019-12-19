@@ -27,9 +27,8 @@ C3H8+5O2 -> 4H2O + 3CO2
 from re import split #정규식 split 함수 
 
 #주기율표 1~127
-atoms=\
-(
-    'H','He',  
+atoms=(
+    'H','He',
     'Li','Be','B','C','N','O','F','Ne',
     'Na','Mg','Al','Si','P','S','Cl','Ar',
     'K','Ca','Sc','Ti','V','Cr','Mn','Fe','Co','Ni','Cu','Zn','Ga','Ge','As','Se','Br','Kr',
@@ -93,14 +92,20 @@ reactants_dict=[dict() for x in range(len(reactants))] #생성물 원소 공간
 products_dict=[dict() for x in range(len(products))] #반응물 원소 공간
 
 for x in range(len(reactants_list)):
-    for j in reactants_list[x]:
+    for j in range(len(reactants_list[x])):
+        var=reactants_list[x][j] # O, H2, O2, C
         try:
-            if j[-1].isdigit():
-                reactants_dict[x][j[:-1]]=int(j[-1]) if reactants_dict[x].get(j[:-1])==None else reactants_dict[x][j[:-1]]+int(x[-1])
-            else:
-                reactants_dict[x][j]=1 if reactants_dict[x-1].get(j)==None else  reactants_dict[x][j]+1
+            if var[-1].isalpha(): #맨 뒷 글자가 문자라면
+                reactants_dict[x][var]=1 if reactants_dict[x].get(var)==None else  reactants_dict[x][var]+1
+            else: #만약 아니라면
+                for k in range(len(var)):
+                    if var[k].isdigit():
+                        reactants_dict[x][var[:k]]=int(var[k:]) if reactants_dict[x].get(var[:k])==None else reactants_dict[x][var[:k]]+int(var[k:])
+                        break
         except KeyError:
+            print("문제 발생: 입력 부분을 확인하고 다시 하시길 바랍니다.")
             pass
+    
 #products
 for x in range(len(products_list)):
     for j in products_list[x]:
@@ -110,6 +115,7 @@ for x in range(len(products_list)):
             else:
                 products_dict[x][j]=1 if products_dict[x].get(j)==None else  products_dict[x][j]+1
         except KeyError:
+            print("문제 발생: 입력 부분을 확인하고 다시 하시길 바랍니다.")
             pass
 
 
@@ -117,7 +123,5 @@ print(reactants_dict)
 print(products_dict)
 #==============================================================================================
 #실제로 존재하는 원소인지 
-
-
 
 
